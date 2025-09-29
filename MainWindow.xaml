@@ -3,35 +3,93 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DiskMonitor"
+        xmlns:local="clr-namespace:DiskMonitor"        
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
-        MinHeight="200"
-        MinWidth="150"
-        Title="MainWindow">
+        MinHeight="100"
+        MinWidth="250"
+        Title="磁盘检测 v1.0.1">
     <Grid Margin="5,0,5,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" MinHeight="65" MaxHeight="65"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <!-- 左边自适应 -->
-            <ColumnDefinition Width="80"/>
-            <!-- 右边固定宽度 -->
-        </Grid.ColumnDefinitions>
-        <ListBox Name="DriveList" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <Button Content="Add" Margin="10,0,0,10" Height="30" Name="AddButton" Click="AddButton_Click"/>
-            <Button Content="Remove" Margin="10,0,0,10" Height="30" Name="RemoveButton" Click="RemoveButton_Click"/>
-
-        </StackPanel>
-        <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-            <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
-                <StackPanel Name="PanelStack" />
-            </ScrollViewer>
-        </DockPanel>
         
-
+        <DockPanel Grid.Row="0" Margin="0,5,0,0">
+            <ListBox Name="DriveList" d:ItemsSource="{d:SampleData ItemCount=5}" MinWidth="150" Height="60" MinHeight="60"/>
+            <UniformGrid Rows="2" Margin="10,0,0,0">
+                <Button Content="Add" Margin="0,0,0,5"   Name="AddButton" Click="AddButton_Click" MaxWidth="100"/>
+                <Button Content="Remove" Margin="0,5,0,0"   Name="RemoveButton" Click="RemoveButton_Click" MaxWidth="100"/>
+            </UniformGrid>
+        </DockPanel>        
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,5">
+                <StackPanel Name="PanelStack" />
+            </ScrollViewer>     
     </Grid>
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="Background" Value="#EEE"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="6"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ProgressBar">
+            <Setter Property="Foreground" Value="LightGreen"/>
+            <Setter Property="Background" Value="#EEE"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Grid x:Name="Root" SnapsToDevicePixels="true">
+                            <!-- 外框，带圆角 -->
+                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="7"/>
+
+                            <!-- 背景轨道 -->
+                            <Border x:Name="PART_Track"
+                            Background="Transparent"
+                            CornerRadius="7"/>
+
+                            <!-- 进度指示部分 -->
+                            <Grid x:Name="PART_Indicator" ClipToBounds="true" HorizontalAlignment="Left">
+                                <!-- 用 Border 代替 Rectangle，保证两端圆角 -->
+                                <Border x:Name="Indicator"
+                                Background="{TemplateBinding Foreground}"
+                                CornerRadius="5"/>
+                                <Border x:Name="Animation"
+                                Background="{TemplateBinding Foreground}"
+                                CornerRadius="5"
+                                RenderTransformOrigin="0.5,0.5">
+                                    <Border.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Border.RenderTransform>
+                                </Border>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 </Window>

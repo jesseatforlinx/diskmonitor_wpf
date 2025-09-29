@@ -68,9 +68,9 @@ namespace DiskMonitor
             DriveList.Items.Add(drive);
 
             // 创建每个盘符的 Panel
-            var sp = new StackPanel() { Margin = new Thickness(0, 2, 0, 2) };
+            var sp = new StackPanel() { Margin = new Thickness(0, 0, 0, 2) };
 
-            var bar = new ProgressBar() { Height = 15, Minimum = 0, Maximum = 100 };
+            var bar = new ProgressBar() { Height = 13, Minimum = 0, Maximum = 100 };
             var label = new Label() { Content = drive, FontSize = 10, Foreground = System.Windows.Media.Brushes.Black };
 
             sp.Children.Add(label);
