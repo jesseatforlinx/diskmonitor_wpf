@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:DiskMonitor"        
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
-        MinHeight="100"
-        MinWidth="250"
+        MinHeight="110"
+        MinWidth="280"
         Title="磁盘检测 v1.0.1">
     <Grid Margin="5,0,5,0">
         <Grid.RowDefinitions>
@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         
         <DockPanel Grid.Row="0" Margin="0,5,0,0">
-            <ListBox Name="DriveList" d:ItemsSource="{d:SampleData ItemCount=5}" MinWidth="150" Height="60" MinHeight="60"/>
+            <ListBox Name="DriveList" d:ItemsSource="{d:SampleData ItemCount=5}" MinWidth="165" Height="60" MinHeight="60"/>
             <UniformGrid Rows="2" Margin="10,0,0,0">
                 <Button Content="Add" Margin="0,0,0,5"   Name="AddButton" Click="AddButton_Click" MaxWidth="100"/>
                 <Button Content="Remove" Margin="0,5,0,0"   Name="RemoveButton" Click="RemoveButton_Click" MaxWidth="100"/>
