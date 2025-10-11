@@ -12,7 +12,7 @@ namespace DiskMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Dictionary<string, (ProgressBar Bar, Label Label, StackPanel Panel)> driveWidgets = new Dictionary<string, (ProgressBar, Label, StackPanel)>();
+        private Dictionary<string, (ProgressBar Bar, TextBlock Label, StackPanel Panel)> driveWidgets = new Dictionary<string, (ProgressBar, TextBlock, StackPanel)>();
         private DispatcherTimer timer;
         private string configFile = "drives.txt";
 
@@ -61,10 +61,10 @@ namespace DiskMonitor
             DriveList.Items.Add(drive);
 
             // 创建每个盘符的 Panel
-            var sp = new StackPanel() { Margin = new Thickness(0, 0, 0, 2) };
+            var sp = new StackPanel();
 
             var bar = new ProgressBar() { Height = 13, Minimum = 0, Maximum = 100 };
-            var label = new Label() { Content = drive, FontSize = 12, Foreground = System.Windows.Media.Brushes.Black };
+            var label = new TextBlock() { Text = drive, FontSize = 12, Foreground = System.Windows.Media.Brushes.Black, Margin = new Thickness(0,2,0,2)};
 
             sp.Children.Add(label);
             sp.Children.Add(bar);
@@ -87,16 +87,16 @@ namespace DiskMonitor
                 var tuple = driveWidgets[drive];
 
                 tuple.Bar.Value = percent;
-                tuple.Label.Content = $"{drive} 剩 {FormatSize(info.AvailableFreeSpace)} / 共 {FormatSize(info.TotalSize)} ({percent:F1}% 已用)";
+                tuple.Label.Text = $"{drive} 剩 {FormatSize(info.AvailableFreeSpace)} / 共 {FormatSize(info.TotalSize)} ({percent:F1}% 已用)";
 
                 // 根据使用率设置颜色
                 if (percent >= 90)
                 {
-                    tuple.Bar.Foreground = Brushes.Red;
+                    tuple.Bar.Foreground = new SolidColorBrush(Color.FromRgb(231, 76, 60));
                 }
                 else
                 {
-                    tuple.Bar.Foreground = Brushes.DodgerBlue;
+                    tuple.Bar.Foreground = new SolidColorBrush(Color.FromRgb(0, 120, 215));
                 }
                 tuple.Bar.Background = Brushes.LightGray;
             }
@@ -106,7 +106,7 @@ namespace DiskMonitor
                 {
                     tuple.Bar.Value = 0;
                     tuple.Bar.Foreground = Brushes.Gray;
-                    tuple.Label.Content = $"{drive} 无法读取";
+                    tuple.Label.Text = $"{drive} 无法读取";
                 }
             }
         }
