@@ -9,6 +9,7 @@ namespace DiskMonitor
     /// </summary>
     public partial class App : Application
     {
+        // 这种互斥锁实现方法仅适用于Windows平台
         private static Mutex? _mutex;
 
         [DllImport("user32.dll")]

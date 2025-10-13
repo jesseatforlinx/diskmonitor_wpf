@@ -150,5 +150,49 @@ namespace DiskMonitor
             DriveList.Items.Remove(drive);
             SaveConfig();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // 从设置加载上次位置和大小
+            if (Properties.Settings.Default.WindowLeft >= 0 &&
+                Properties.Settings.Default.WindowTop >= 0)
+            {
+                this.Left = Properties.Settings.Default.WindowLeft;
+                this.Top = Properties.Settings.Default.WindowTop;
+            }
+
+            if (Properties.Settings.Default.WindowWidth > 0)
+                this.Width = Properties.Settings.Default.WindowWidth;
+
+            if (Properties.Settings.Default.WindowHeight > 0)
+                this.Height = Properties.Settings.Default.WindowHeight;
+
+            if (Properties.Settings.Default.WindowMaximized)
+                this.WindowState = WindowState.Maximized;
+
+            // Avoid error when switching display
+            var screenWidth = SystemParameters.VirtualScreenWidth;
+            var screenHeight = SystemParameters.VirtualScreenHeight;
+
+            if (this.Left + this.Width > screenWidth)
+                this.Left = screenWidth - this.Width;
+            if (this.Top + this.Height > screenHeight)
+                this.Top = screenHeight - this.Height;
+            if (this.Left < 0) this.Left = 0;
+            if (this.Top < 0) this.Top = 0;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // 保存当前窗口的位置和大小
+            Properties.Settings.Default.WindowLeft = this.Left;
+            Properties.Settings.Default.WindowTop = this.Top;
+            Properties.Settings.Default.WindowWidth = this.Width;
+            Properties.Settings.Default.WindowHeight = this.Height;
+            Properties.Settings.Default.WindowMaximized =
+                (this.WindowState == WindowState.Maximized);
+
+            Properties.Settings.Default.Save();
+        }
     }
 }
