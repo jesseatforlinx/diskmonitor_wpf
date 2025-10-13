@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Ookii.Dialogs.Wpf;
+using System.Collections.Specialized;
 
 namespace DiskMonitor
 {
@@ -20,12 +21,12 @@ namespace DiskMonitor
         {
             InitializeComponent();
 
-            // 读取配置
-            if (File.Exists(configFile))
+            // 从 Settings 读取盘符列表
+            if (Properties.Settings.Default.Drives != null)
             {
-                foreach (var line in File.ReadAllLines(configFile))
+                foreach (string drive in Properties.Settings.Default.Drives)
                 {
-                    AddDrive(line.Trim());
+                    AddDrive(drive);
                 }
             }
 
@@ -36,14 +37,14 @@ namespace DiskMonitor
             timer.Start();
         }
 
-        private void SaveConfig()
+        private void SaveDrivesToSettings()
         {
-            var drives = new List<string>();
+            var drives = new StringCollection();
             foreach (var item in DriveList.Items)
-            {
                 drives.Add(item.ToString());
-            }
-            File.WriteAllLines(configFile, drives);
+
+            Properties.Settings.Default.Drives = drives;
+            Properties.Settings.Default.Save();
         }
 
         private void UpdateDrives()
@@ -116,23 +117,25 @@ namespace DiskMonitor
             double size = bytes;
             if (size < 1024 * 1024 * 1024)
                 return $"{size / (1024 * 1024):F1} MB";
-            else
+            else if (size < 1024L * 1024 * 1024 * 1024)
                 return $"{size / (1024 * 1024 * 1024):F1} GB";
+            else
+                return $"{size / (1024L * 1024 * 1024 * 1024):F2} TB";
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new VistaFolderBrowserDialog
+            var dlg = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog
             {
                 Description = "请选择一个文件夹",
-                UseDescriptionForTitle = true // 部分系统会把 Description 当标题显示
+                UseDescriptionForTitle = true
             };
 
             if (dlg.ShowDialog(this) == true)
             {
                 string drive = System.IO.Path.GetPathRoot(dlg.SelectedPath);
                 AddDrive(drive);
-                SaveConfig();
+                SaveDrivesToSettings();
             }
         }
 
@@ -148,7 +151,7 @@ namespace DiskMonitor
             }
 
             DriveList.Items.Remove(drive);
-            SaveConfig();
+            SaveDrivesToSettings();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -159,10 +162,7 @@ namespace DiskMonitor
             {
                 this.Left = Properties.Settings.Default.WindowLeft;
                 this.Top = Properties.Settings.Default.WindowTop;
-            }
-
-            if (Properties.Settings.Default.WindowMaximized)
-                this.WindowState = WindowState.Maximized;
+            }            
 
             // Avoid error when switching display
             var screenWidth = SystemParameters.VirtualScreenWidth;

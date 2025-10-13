@@ -46,5 +46,16 @@ namespace DiskMonitor.Properties {
                 this["WindowTop"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection Drives {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Drives"]));
+            }
+            set {
+                this["Drives"] = value;
+            }
+        }
     }
 }
