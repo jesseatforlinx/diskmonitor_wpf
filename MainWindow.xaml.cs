@@ -162,16 +162,7 @@ namespace DiskMonitor
             {
                 this.Left = Properties.Settings.Default.WindowLeft;
                 this.Top = Properties.Settings.Default.WindowTop;
-            }            
-
-            // Avoid error when switching display
-            var screenWidth = SystemParameters.VirtualScreenWidth;
-            var screenHeight = SystemParameters.VirtualScreenHeight;
-
-            if (this.Left < 0) this.Left = 0;
-            if (this.Top < 0) this.Top = 0;
-            if (this.Left + this.Width > screenWidth) this.Left = screenWidth - this.Width;
-            if (this.Top + this.Height > screenHeight) this.Top = screenHeight - this.Height;
+            }                       
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
