@@ -20,6 +20,10 @@ namespace DiskMonitor
         public MainWindow()
         {
             InitializeComponent();
+            
+            this.Left = Properties.Settings.Default.WindowLeft;
+            this.Top = Properties.Settings.Default.WindowTop;
+
 
             // 从 Settings 读取盘符列表
             if (Properties.Settings.Default.Drives != null)
@@ -163,15 +167,6 @@ namespace DiskMonitor
                 this.Left = Properties.Settings.Default.WindowLeft;
                 this.Top = Properties.Settings.Default.WindowTop;
             }                       
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            // 保存当前窗口的位置和大小
-            Properties.Settings.Default.WindowLeft = this.Left;
-            Properties.Settings.Default.WindowTop = this.Top;
-
-            Properties.Settings.Default.Save();
         }
     }
 }
