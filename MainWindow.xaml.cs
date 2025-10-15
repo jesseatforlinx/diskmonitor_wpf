@@ -21,9 +21,8 @@ namespace DiskMonitor
         {
             InitializeComponent();
             
-            this.Left = Properties.Settings.Default.WindowLeft;
             this.Top = Properties.Settings.Default.WindowTop;
-
+            this.Left = Properties.Settings.Default.WindowLeft;
 
             // 从 Settings 读取盘符列表
             if (Properties.Settings.Default.Drives != null)
@@ -158,15 +157,15 @@ namespace DiskMonitor
             SaveDrivesToSettings();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // 从设置加载上次位置和大小
-            if (Properties.Settings.Default.WindowLeft >= 0 &&
-                Properties.Settings.Default.WindowTop >= 0)
+            if (this.WindowState == WindowState.Normal)
             {
-                this.Left = Properties.Settings.Default.WindowLeft;
-                this.Top = Properties.Settings.Default.WindowTop;
-            }                       
+                Properties.Settings.Default.WindowTop = this.Top;
+                Properties.Settings.Default.WindowLeft = this.Left;
+            }
+
+            Properties.Settings.Default.Save();
         }
     }
 }
